@@ -10,7 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class RegisterUserTypeForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -23,13 +25,26 @@ class RegisterUserTypeForm extends AbstractType
                     'class' => 'w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 mt-2',
                 ]
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Votre mot de passe',
-                'attr' => [
-                    'placeholder' => 'Enter your password',
+      
+
+                // Gestion des passwords
+
+                ->add('plainPassword', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'constraints' => [new Length(['min'=>5, 'max'=>30])],
+            
+                
+                    'first_options'  => ['label' => 'Mot de passe', 'hash_property_path' => 'password', 'attr' => [
+                    'placeholder' => 'Entrez votre mot de passe',
                     'class' => 'w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 mt-2',
-                ]
-            ])
+                ]],
+                    'second_options' => ['label' => 'Confirmation du mot de passe', 'attr' => [
+                    'placeholder' => 'Entrez à nouveau votre mot de passe',
+                    'class' => 'w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 mt-2',
+                ]],
+                    'mapped' => false,
+                ])
+
             ->add('firstname', TextType::class, [
                 'label' => 'Votre prénom',
                 'attr' => [
@@ -58,6 +73,14 @@ class RegisterUserTypeForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'constraints' => [ new UniqueEntity
+            (
+                entityClass: User::class,
+                fields : ['email'],
+                message : 'Cet email est déjà utilisé.',
+            )
+        ],
+            
         ]);
     }
 }
