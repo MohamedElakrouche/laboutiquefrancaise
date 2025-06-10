@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+
+<body class="min-h-screen flex flex-col bg-gray-100">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}La Boutique française !{% endblock %}</title>
@@ -52,7 +54,7 @@
 
     </head>
 
-    <body>
+    <main class="flex-grow">
    {% for label, messages in app.flashes %}
     {% for message in messages %}
     <div class="flex justify-center">
@@ -63,11 +65,13 @@
     {% endfor %}
 {% endfor %}
         {% block body %}{% endblock %}
-    </body>
-
-    <footer>
-        <div class="bg-gray-900 text-white text-center p-4">
-            <p>&copy; 2025 La Boutique française. Tous droits réservés.</p>
+</main>
+        <footer>
+        <div class="bg-gray-900 text-white text-center p-4 mb-0">
+            <p> 2025 La Boutique française. Tous droits réservés.</p>
         </div>
     </footer>
+    
+</body>
+    
 </html>

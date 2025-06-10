@@ -24,7 +24,15 @@ if ($form->isSubmitted() && $form->isValid()) {
     $user=$form->getData();
     $entityManager->persist($user);
     $entityManager->flush();
-    }
+    $this->addFlash(
+    'success',
+    'Votre compte a bien été créer, vous pouvez vous connecté'
+    );
+    return $this->redirectToRoute('app_login');
+} else ($this->addFlash(
+    'error',
+    'Veuillez ressaisir votre inscription')
+    );
     return $this->render('register/index.html.twig', [
         'registerForm' => $form->createView(),
     ]);
