@@ -1,0 +1,9 @@
+
+
+<h1>ma catégorie {{category.name}}</h1>
+
+<p> Cette catégorie contient {{category.products|length}} produits</p>
+
+{%for product in category.products%}
+{{product.name}}
+{%endfor%}
