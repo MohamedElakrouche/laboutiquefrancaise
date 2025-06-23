@@ -75,7 +75,12 @@ class Product
 
         return $this;
     }
+public function getPriceWT() 
+{
+$coef=1+($this->tva/100);
+return $coef*$this->price;
 
+}
     public function getIllustration(): ?string
     {
         return $this->illustration;
